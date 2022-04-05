@@ -2,7 +2,7 @@
 <html>
   <body>
     <h1> 1. Team name and team members (up to 4 persons/team) </h1>
-      <p>Patrik Vahala, Aleksi Eskola, Helena Lähdesniemi and Kalle Hautamäki</p>
+      Patrik Vahala, Aleksi Eskola, Helena Lähdesniemi and Kalle Hautamäki
     <h1>2. Application / Use-case</h1>
       <p>Describe what is your objective application and why you have chosen it. Do you want to be able to
       navigate an unknown environment? Perform a synchronized choreography? What else?</p>
