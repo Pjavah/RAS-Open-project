@@ -16,6 +16,8 @@
       is made on each data.</p>
       <p>Include at least one diagram or other figure illustrating the different parts of your system.</p>
     <h1>4. GitHub repo link</h1>
+      https://github.com/Pjavah/RAS-Open-project
+      <a href="https://github.com/Pjavah/RAS-Open-project">Open project link</a>
     <h1>5. Background</h1>
       <p>Explain what you already know regarding your project. Which parts are you most confident that
       you can finish successfully? Which parts are the riskiest?</p>
