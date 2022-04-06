@@ -2,24 +2,29 @@
 <html>
   <body>
     <h1> 1. Team name and team members (up to 4 persons/team) </h1>
+    <p>JetBros/Brosettes</p>
       <p>Patrik Vahala, Aleksi Eskola, Helena Lähdesniemi and Kalle Hautamäki</p>
     <h1>2. Application / Use-case</h1>
-      <p>Describe what is your objective application and why you have chosen it. Do you want to be able to
-      navigate an unknown environment? Perform a synchronized choreography? What else?</p>
+      <p>We have a Jetbot and a Tello drone. Jetbot has a landing area on top of it where the Tello drone can land/take off. The starting point is that the Tello is sitting on top of the Jetbot and begins to take off. As soon as the Tello is in the air, the Jetbot begins to search for a QR code. The QR-codes have simple instructions on them so that the Jetbot can proceed to find the next one. The Tello follows the Jetbot on the air, trying to stay on near the jetbot. When the Jetbot has found the final QR code and has gotten to the right distance from it,  the Tello drone will begin to land on top of the Jetbot/next to it. </p>
+    <h3>Why this project?</h3>
+    <p>From the first project we learned about the aruco markers and how to use them. They seemed to be a simple and interesting way to give external information into our multi robot system. With them, we can add an extra challenge to the project instead of just moving the Jetbot to point x and Tello following it. </p>
+    <h3>Aruco marker example: </h3>
+    <p>We’ll create a few aruco markers with ids from 1 to 4. Those ids will be used in a dictionary, where the corresponding function is saved.
+</p>
+    <p>[1, Turn left]</p>
+    <p>[2, Turn right]</p>
+    <p>[3, Turn left]</p>
+    <p>[4, tello land]</p>
     <h1>3. The system</h1>
-      <p>Describe the system you will build for the selected use-case from the perspective of:</p>
-      <p>- Robots, computing platforms and other major elements.</p>
-      <p>- Sensor suites.</p>
-      <p>- Communication (technologies, network topologies...).</p>
-      <p>- Algorithms (path planning, mapping, sensor fusion...).</p>
-      <p>- Data flow (where the data originates, where it is processed, what kind of decision making
-      is made on each data.</p>
-      <p>Include at least one diagram or other figure illustrating the different parts of your system.</p>
+    <p>Robots: Jetbot, Tello drone.</p>
+    <p>Sensor suites: Camera, probably some odometry.</p>
+    <p>Communication: Bluetooth(?).</p>
+    <p>Algorithms: Collision detection, Aruco reading.</p>
+    <p>Data flow: See below.</p>
     <h1>4. GitHub repo link</h1>
       <a href="https://github.com/Pjavah/RAS-Open-project">Open project link</a>
     <h1>5. Background</h1>
-      <p>Explain what you already know regarding your project. Which parts are you most confident that
-      you can finish successfully? Which parts are the riskiest?</p>
+      <p>We know how to read aruco markers and how to calculate a robot's distance from it. Collision detection is also very familiar. Those parts are the ones we are confident we can finish. Riskiest parts are the ones where Tello needs to mirror Jetbots movements and follow it. Getting the Tello to liftoff and land on the Jetbot are also quite risky, but if it fails it will just do those from besides the Jetbot.</p>
     <h1>6. Expected challenges and wishes to learn</h1>
       <p>Explain what you need to investigate to fulfill your project objectives. What do you expect the main
       challenges to be? What would you like to learn during the remaining lab sessions that would help
