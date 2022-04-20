@@ -1,0 +1,7 @@
+#ignore all shit that aint sources
+/project_ws/build
+/project_ws/install
+/project_ws/log
+/project_ws/src/project_pkg/test
+/project_ws/src/project_pkg/resource
+/project_ws/src/project_pkg/project_pkg/__pycache__
