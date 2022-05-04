@@ -53,7 +53,7 @@ We’ll create a few aruco markers with ids from 1 to 4. Those ids will be used 
 
 <del>Data flow: See below.</del>
 
-<del>![](/PlanPictures/DataFlowChart.png)</del>
+![](/PlanPictures/DataFlowChart2.png)
 
 4\. GitHub repo link
 ====================
@@ -89,7 +89,7 @@ Helena will work on the jetbot.
 
 8\. Work packages (how is the work going to be divided among team members and in time), with tentative project schedule.
 ========================================================================================================================
-![](/PlanPictures/GANTCHART.png)
+![](/PlanPictures/GANTCHART2.png)
 
 9\. Description of final experiment or demonstration.
 =====================================================
