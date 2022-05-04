@@ -88,4 +88,4 @@ def contourSquares(img, id):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-contourSquares(cv2.imread('C:/Users/aleskola/Documents/RAS/RAS-Open-project/project_ws/src/project_pkg/images/red.jpeg'),3)
+# contourSquares(cv2.imread('C:/Users/aleskola/Documents/RAS/RAS-Open-project/project_ws/src/project_pkg/images/red.jpeg'),3)
