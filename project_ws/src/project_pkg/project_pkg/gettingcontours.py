@@ -17,26 +17,20 @@ def contourSquares(img, id):
 
     hsv = cv2.cvtColor(subtract, cv2.COLOR_BGR2HSV)
 
-    blue_lower_bound = np.array([85, 120, 100])   
-    blue_upper_bound = np.array([110, 255, 255])
-
-    green_lower_bound = np.array([35, 120, 100])   
-    green_upper_bound = np.array([80, 255, 255])
-    
-    red_lower_bound = np.array([0, 120, 100])   
-    red_upper_bound = np.array([15, 255, 255])
-    
-    yellow_lower_bound = np.array([20, 120, 100])   
-    yellow_upper_bound = np.array([35, 255, 255])
-
+    # Blue
     if (id==1):
-        mask = cv2.inRange(hsv, blue_lower_bound, blue_upper_bound)
+        mask = cv2.inRange(hsv, (85,120,100), (110,255,255))
+    # Green
     if (id==2):
-        mask = cv2.inRange(hsv, green_lower_bound, green_upper_bound)
+        mask = cv2.inRange(hsv, (35,120,100), (80,255,255))
+    # Red
     if (id==3):
-        mask = cv2.inRange(hsv, red_lower_bound, red_upper_bound)
+        mask1 = cv2.inRange(hsv, (0,120,100), (15,255,255))
+        mask2 = cv2.inRange(hsv, (160,120,100), (180,255,255))
+        mask = cv2.bitwise_or(mask1, mask2)
+    # Yellow
     if (id==4):
-        mask = cv2.inRange(hsv, yellow_lower_bound, yellow_upper_bound)
+        mask = cv2.inRange(hsv, (20,120,100), (35,255,255))
 
     # find the colors within the boundaries
     
