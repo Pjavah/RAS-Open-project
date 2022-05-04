@@ -76,16 +76,18 @@ def contourSquares(img, id):
             cv2.drawContours(drawing, contours_poly, i, color)
             cv2.rectangle(drawing, (int(boundRect[i][0]), int(boundRect[i][1])), \
                 (int(boundRect[i][0]+boundRect[i][2]), int(boundRect[i][1]+boundRect[i][3])), color, 2)
+            return 1
 
 
-    while True:
+    # while True:
 
     
-        cv2.imshow("rectangles", drawing)
-        cv2.imshow("original", output)
-        cv2.imwrite('output.jpeg', output)
+        # cv2.imshow("rectangles", drawing)
+        # cv2.imshow("original", output)
+        # cv2.imwrite('output.jpeg', output)
+    return 0
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #     break
 
-# contourSquares(cv2.imread('C:/Users/aleskola/Documents/RAS/RAS-Open-project/project_ws/src/project_pkg/images/red.jpeg'),3)
+# contourSquares(cv2.imread('C:/Users/aleskola/Documents/RAS/RAS-Open-project/project_ws/src/project_pkg/images/green.jpeg'),1)
