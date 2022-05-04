@@ -9,7 +9,7 @@ import sys
 from sensor_msgs.msg import Image
 from std_msgs.msg import Empty
 from geometry_msgs.msg import Twist
-from std_msgs.msg import String
+from std_msgs.msg import Int16
 
 desired_aruco_dictionary = cv.aruco.DICT_4X4_50
 this_aruco_dictionary = cv.aruco.Dictionary_get(desired_aruco_dictionary)
@@ -20,12 +20,19 @@ class Tello(Node):
     
     def __init__(self):
         super().__init__('tello')
+
+        #self.jetId is the number corresponding to a color
         self.jetId=0
         self.cnt = 0
+        #takenoff is a boolean to know if there has been a take off command
+        self.takenoff = False
+
+
         self.image_sub = self.create_subscription(Image, "/camera",self.cam_callback, 10)
-        self.qr_sub = self.create_subscription()#QRKOODI, "/QRKAMERA", self.qr_callback, 10 )
-        self.cmdvel_publisher = self.create_publisher(Twist, '/control', 10)
-        self.found_publisher = self.create_publisher(String, "/command", 10)
+        self.qr_subber = self.create_subscription(Int16, "/objectfound", self.color_sub, 10)#QRKOODI, "/QRKAMERA", self.qr_callback, 10 )
+        #self.cmdvel_publisher = self.create_publisher(Twist, '/control',self.qr_sub, 10)
+        self.found_publisher = self.create_publisher(Int16, "/command", 10)
+        self.takeoff_subber = self.create_subscription(Empty, '/takeoff',self.takeoff_sub, 10)
 
         #TAKEOFF AND LAND NOT REQUIRED, JETBOT PUBLISHES THESE
         #self.takeoff_publisher = self.create_publisher(Empty, '/takeoff', 10)
@@ -41,25 +48,32 @@ class Tello(Node):
 
 
             #Aruco detection, prints found id. 
-            #I don't know if ids are in array or in a single int?
+            #ids = array of arrays
             (corners, ids, rejected) = cv.aruco.detectMarkers(
                 cv2_img, this_aruco_dictionary, parameters=this_aruco_parameters)
             print(ids)
+            #if ids:
+            #    print(ids[0][0])
             #cv.imshow("Result",frame)
             #cv.waitKey(1)
 
             #search for any aruco markers
 
-            #after finding auroco, compare the id to jetbot's
-            if ids == self.jetId:
-                msg = String()
-                msg.data = "Found!"
+            if ids is not None:
+                msg = Int16()
+                msg.data = int(ids[0][0])
                 self.found_publisher.publish(msg)
 
 
 
-    def qr_sub(self, msg):
+    def color_sub(self, msg):
         self.jetId = msg
+        print(msg)
+
+    def takeoff_sub(self, msg):
+        if msg:
+            self.takenoff = True
+            print(self.takenoff)
 
     def imgmsg_to_cv2(self, img_msg):
         n_channels = len(img_msg.data) // (img_msg.height * img_msg.width)
