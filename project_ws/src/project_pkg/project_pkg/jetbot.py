@@ -17,7 +17,7 @@ class Jetbot(Node):
     def __init__(self):
         super().__init__('jetbot')
         self.cnt = 0
-        self.takeoff, self.land = 1, 0
+        self.takeoff, self.land = 0, 0
         self.id = 0
         self.wait = 0  # This is a flag that tells when to wait next id from Tello
         self.found_cubes = []

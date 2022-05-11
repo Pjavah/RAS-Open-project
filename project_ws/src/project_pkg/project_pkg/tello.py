@@ -21,34 +21,24 @@ class Tello(Node):
     def __init__(self):
         super().__init__('tello')
 
-        #self.jetId is the number corresponding to a color
+        #jetId is a flag which tells whether jetbot found the correct cube or not
         self.jetId=0
         self.cnt = 0
         #takenoff is a boolean to know if there has been a take off command
         self.takenoff = False
         self.found = False
 
-        self.foundIds = []
-
-
         self.image_sub = self.create_subscription(Image, "/camera",self.cam_callback, 10)
-        self.qr_subber = self.create_subscription(Int16, "/found", self.color_sub, 10)#QRKOODI, "/QRKAMERA", self.qr_callback, 10 )
+        self.qr_subber = self.create_subscription(Int16, "/found", self.color_sub, 10)
         self.cmdvel_publisher = self.create_publisher(Twist, '/control', 10)
         self.found_publisher = self.create_publisher(Int16, "/command", 10)
         self.takeoff_subber = self.create_subscription(Empty, '/takeoff',self.takeoff_sub, 10)
 
-        #TAKEOFF AND LAND NOT REQUIRED, JETBOT PUBLISHES THESE
-        #self.takeoff_publisher = self.create_publisher(Empty, '/takeoff', 10)
-        #self.land_publisher = self.create_publisher(Empty, '/land', 10)
 
     def cam_callback(self,msg):
         self.cnt += 1
         if(self.cnt % 5 == 0):
             cv2_img = self.imgmsg_to_cv2(msg)
-#if ids:
-            #    print(ids[0][0])
-            #cv.imshow("Result",frame)
-            #cv.waitKey(1)
 
 
 
@@ -57,77 +47,62 @@ class Tello(Node):
             #ids = array of arrays
             (corners, ids, rejected) = cv.aruco.detectMarkers(
                 cv2_img, this_aruco_dictionary, parameters=this_aruco_parameters)
-            #if ids:
-            #    print(ids[0][0])
-            #cv.imshow("Result",frame)
-            #cv.waitKey(1)
+            
 
             if self.takenoff:
                 end_time = time.time()+10
                 msg = Twist()
                 msg.linear.z = 16.0
                 msg.angular.z = 0.0
-                print("starting position")
                 self.takenoff=0
                 while(time.time() < end_time):
                     self.cmdvel_publisher.publish(msg)
-                    print("UPUPUP!")
                     time.sleep(0.2)
 
-            if ids != self.jetId:
-                print("doing the spinns!!")
+            #Spinning
+            if ids == None:
                 msg = Twist()
-                msg.angular.z = 18.0
-                msg.linear.x = 7.0
+                msg.angular.z = 20.0
+                msg.linear.x = 0.0
                 msg.linear.z = 0.0
                 self.cmdvel_publisher.publish(msg)
             
 
             #found ids
             if ids is not None:
-                print("ids: " + ids)
                 #checking that there's only one id and its not one of the previously found ids
-                if len(ids) == 1 and ids not in self.foundIds:
-                    print("Tello found this single id: " + ids[0][0])
-                    #stop
+                if len(ids) == 1:
                     msg = Twist()
                     msg.angular.z = 0.0
                     msg.linear.x = 0.0
                     msg.linear.z = 0.0
                     self.cmdvel_publisher.publish(msg)
 
-                    self.foundIds.append(ids)
-
                     #publish the id
                     msg2 = Int16()
                     msg2.data = int(ids[0][0])
-                    self.found_publisher.publish(msg2) #/command topic
+                    self.found_publisher.publish(msg2)
 
                     #wait until jetbot finds it
                     if self.jetId == ids[0][0]:
                         #set found variable to true
                         self.found = True
-
-                        #if found then stay for three seconds
-                        if self.found == True:
-                            end_time = time.time()+3
-                            while(time.time() < end_time):
-                                self.found = False
-                                print("Staying here for 3 seconds to show that we actually found it!")
-                                time.sleep(0.2)
+                        end_time = time.time()+3
+                        #Staying here for 3 seconds to show that we actually found it!
+                        while(time.time() < end_time):
+                            self.found = False
+                            time.sleep(0.2)
 
                             #after three seconds, start spinning without subscribing for five seconds
-                            #end_time2 = time.time()+5
-                            #msg3 = Twist()
-                            #msg3.angular.z = 18.0
-                            #msg3.linear.x = 7.0
-                            #msg3.linear.z = 0.0
-                            #
-                            #while(time.time() < end_time2):
-                            #    self.cmdvel_publisher.publish(msg3)
-                            #    print("now starting the spin again")
-                            #    time.sleep(0.2)
-                            #and hopefully after this, the tello has lost the previous id / aruco
+                            end_time2 = time.time()+5
+                            msg3 = Twist()
+                            msg3.angular.z = 20.0
+                            msg3.linear.x = 0.0
+                            msg3.linear.z = 0.0
+                            
+                            while(time.time() < end_time2):
+                                self.cmdvel_publisher.publish(msg3)
+                                time.sleep(0.2)
 
 
 
