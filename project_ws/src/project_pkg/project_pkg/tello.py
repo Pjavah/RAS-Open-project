@@ -28,6 +28,8 @@ class Tello(Node):
         self.takenoff = False
         self.found = False
 
+        self.foundIds = []
+
 
         self.image_sub = self.create_subscription(Image, "/camera",self.cam_callback, 10)
         self.qr_subber = self.create_subscription(Int16, "/found", self.color_sub, 10)#QRKOODI, "/QRKAMERA", self.qr_callback, 10 )
@@ -84,8 +86,8 @@ class Tello(Node):
             #found ids
             if ids is not None:
                 print("ids: " + ids)
-                #checking that there's only one id
-                if len(ids) == 1:
+                #checking that there's only one id and its not one of the previously found ids
+                if len(ids) == 1 and ids not in self.foundIds:
                     print("Tello found this single id: " + ids[0][0])
                     #stop
                     msg = Twist()
@@ -93,14 +95,19 @@ class Tello(Node):
                     msg.linear.x = 0.0
                     msg.linear.z = 0.0
                     self.cmdvel_publisher.publish(msg)
+
+                    self.foundIds.append(ids)
+
                     #publish the id
                     msg2 = Int16()
                     msg2.data = int(ids[0][0])
                     self.found_publisher.publish(msg2) #/command topic
+
                     #wait until jetbot finds it
                     if self.jetId == ids[0][0]:
                         #set found variable to true
                         self.found = True
+
                         #if found then stay for three seconds
                         if self.found == True:
                             end_time = time.time()+3
@@ -108,16 +115,18 @@ class Tello(Node):
                                 self.found = False
                                 print("Staying here for 3 seconds to show that we actually found it!")
                                 time.sleep(0.2)
+
                             #after three seconds, start spinning without subscribing for five seconds
-                            end_time2 = time.time()+5
-                            msg3 = Twist()
-                            msg3.angular.z = 18.0
-                            msg3.linear.x = 7.0
-                            msg3.linear.z = 0.0
-                            while(time.time() < end_time2):
-                                self.cmdvel_publisher.publish(msg3)
-                                print("now starting the spin again")
-                                time.sleep(0.2)
+                            #end_time2 = time.time()+5
+                            #msg3 = Twist()
+                            #msg3.angular.z = 18.0
+                            #msg3.linear.x = 7.0
+                            #msg3.linear.z = 0.0
+                            #
+                            #while(time.time() < end_time2):
+                            #    self.cmdvel_publisher.publish(msg3)
+                            #    print("now starting the spin again")
+                            #    time.sleep(0.2)
                             #and hopefully after this, the tello has lost the previous id / aruco
 
 
