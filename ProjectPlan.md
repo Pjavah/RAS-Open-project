@@ -39,7 +39,7 @@ We’ll create a few aruco markers with ids from 1 to 4. Those ids will be used 
 
 <p>Data flow: See below.</p>
 
-![](/PlanPictures/DataFlowChart2.png)
+![](/PlanPictures/dataFlowXHart3.png)
 
 4\. GitHub repo link
 ====================
