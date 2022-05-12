@@ -25,8 +25,8 @@ class Tello(Node):
         self.jetId=0
         self.cnt = 0
         #takenoff is a boolean to know if there has been a take off command
-        self.takenoff = False
-        self.found = False
+        self.takenoff = False #checks if the tello has taken off
+        self.found = False #checks if the jetbot has found the correct id
 
         self.image_sub = self.create_subscription(Image, "/camera",self.cam_callback, 10)
         self.qr_subber = self.create_subscription(Int16, "/found", self.color_sub, 10)
@@ -48,7 +48,7 @@ class Tello(Node):
             (corners, ids, rejected) = cv.aruco.detectMarkers(
                 cv2_img, this_aruco_dictionary, parameters=this_aruco_parameters)
             
-
+            #if tello has sent taken off, go up for 10 seconds
             if self.takenoff:
                 end_time = time.time()+10
                 msg = Twist()
@@ -59,7 +59,7 @@ class Tello(Node):
                     self.cmdvel_publisher.publish(msg)
                     time.sleep(0.2)
 
-            #Spinning
+            #If no ids are visible, the drone spins until it finds one. 
             if ids == None:
                 msg = Twist()
                 msg.angular.z = 20.0
@@ -68,9 +68,9 @@ class Tello(Node):
                 self.cmdvel_publisher.publish(msg)
             
 
-            #found ids
+            #When the drone finds an id
             if ids is not None:
-                #checking that there's only one id and its not one of the previously found ids
+                #checking that there's only one id and stare at that for now
                 if len(ids) == 1:
                     msg = Twist()
                     msg.angular.z = 0.0
@@ -78,7 +78,7 @@ class Tello(Node):
                     msg.linear.z = 0.0
                     self.cmdvel_publisher.publish(msg)
 
-                    #publish the id
+                    #publish the id for the jetbot
                     msg2 = Int16()
                     msg2.data = int(ids[0][0])
                     self.found_publisher.publish(msg2)
@@ -94,6 +94,7 @@ class Tello(Node):
                             time.sleep(0.2)
 
                             #after three seconds, start spinning without subscribing for five seconds
+                            #this is so that the tello really has lost the previous id
                             end_time2 = time.time()+5
                             msg3 = Twist()
                             msg3.angular.z = 20.0
@@ -109,7 +110,7 @@ class Tello(Node):
     def color_sub(self, msg):
         #/found topic
         self.jetId = msg.data
-        #print(msg.data)
+        
 
     def takeoff_sub(self, msg):
         if msg:
