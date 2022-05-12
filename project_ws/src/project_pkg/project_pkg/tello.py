@@ -25,7 +25,7 @@ class Tello(Node):
         self.jetId=0
         self.cnt = 0
         #takenoff is a boolean to know if there has been a take off command
-        self.takenoff = False #checks if the tello has taken off
+        self.takenoff = False
         self.found = False #checks if the jetbot has found the correct id
 
         self.image_sub = self.create_subscription(Image, "/camera",self.cam_callback, 10)
